@@ -1,0 +1,55 @@
+#db:
+#  host: 192.168.10.47
+#  port: 3306
+#  user: baiduyun
+#  passwd: Baiduyun@123
+#  platfromDbName: bigdata_platfrom
+#  dbName: bigdata_core
+#  prefix: bigdata
+#  maxConn: 20
+#  maxIdleConn: 20
+#  showSql: true
+#  DbType: 0
+db:
+  host: localhost
+  port: 3306
+  user: root
+  passwd: 123456
+  dbName: bigdata_core
+  prefix: bigdata_
+  maxConn: 20
+  maxIdleConn: 20
+  showSql: true
+  DbType: 0
+
+
+  # redis
+  # - addr 地址
+  # - port 端口
+  # - passwd 密码
+  # - db 数据库
+  # - maxRetries 最大重试次数
+redis:
+  addr: 127.0.0.1
+  port: 16379
+  passwd:
+  db: 1
+  maxRetries: 5
+  poolSize: 10
+
+# s3
+# - ak/sk s3的ak/sk参数配置信息
+# - endpoint s3服务器地址
+# - bucket s3服务器的bucket名称
+# - version s3鉴权协议
+# - path s3相对路径
+# - useSsl 是否开启ssl
+# 备注： 对象存储的bucket 只能用中划线，不能使用下划线。 mysql与对象存储是反的
+s3:
+  ak: 680WDB7Y8WLKEYSK173I
+  sk: XVn0UrfP3SymDwhrMx8NepNqjiveJ1cof16gaGlA
+  endpoint: s3.bestcloud.cn
+  bucket: ddtest
+  version: V2
+  path: big-data
+  useSsl: false
