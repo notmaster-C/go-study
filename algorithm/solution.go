@@ -435,6 +435,27 @@ func getTrend(x, y int) int {
 	return 1
 }
 
+// LCP 01. 猜数字
+func game(guess []int, answer []int) int {
+	flag := 0
+	for i := 0; i < 3; i++ {
+		if guess[i] == answer[i] {
+			flag++
+		}
+	}
+	return flag
+}
+
+// LCP 02. 分式化简
+func fraction(cont []int) []int {
+	res := make([]int, 2)
+	n := len(cont)
+	res[0], res[1] = cont[n-1], 1
+	for i := n - 2; i >= 0; i-- {
+		res[1], res[0] = res[0], cont[i]*res[0]+res[1]
+	}
+	return res
+}
 func Test() {
 	//fmt.Println(convert("PAYPALISHIRING", 2))
 	// fmt.Println(isPalindrome(121))
