@@ -28,7 +28,7 @@ var (
 	apiKey    = "fb5e571ec01c8ae251aed9f0ca1db8bd"
 )
 
-func main() {
+func main1() {
 	// fmt.Println(HmacWithShaTobase64("hmac-sha256", "hello\nhello", "hello"))
 	// st := time.Now()
 	d := websocket.Dialer{

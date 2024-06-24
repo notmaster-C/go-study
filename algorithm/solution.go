@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strings"
 )
 
 /*
@@ -312,7 +313,130 @@ func reverse(x int) int {
 	}
 	return ans
 }
+
+/*
+字符串转换整数 (atoi)
+函数 myAtoi(string s) 的算法如下：
+
+空格：读入字符串并丢弃无用的前导空格（" "）
+符号：检查下一个字符（假设还未到字符末尾）为 '-' 还是 '+'。如果两者都不存在，则假定结果为正。
+转换：通过跳过前置零来读取该整数，直到遇到非数字字符或到达字符串的结尾。如果没有读取数字，则结果为0。
+舍入：如果整数数超过 32 位有符号整数范围 [−231,  231 − 1] ，需要截断这个整数，使其保持在这个范围内。具体来说，小于 −231 的整数应该被舍入为 −231 ，大于 231 − 1 的整数应该被舍入为 231 − 1 。
+返回整数作为最终结果
+*/
+func myAtoi(s string) (r int) {
+	t := strings.TrimSpace(s)
+	symbol := 1
+	if len(t) == 0 {
+		return 0
+	}
+	switch t[0] {
+	case '-':
+		symbol = -1
+		t = t[1:]
+		break
+	case '+':
+		t = t[1:]
+		break
+	}
+	for i := 0; i < len(t); i++ {
+		n := t[i]
+		if n < '0' || n > '9' {
+			r = r * symbol
+			return
+		}
+		r = r*10 + int(n-'0')
+		m := r * symbol
+		if m < math.MinInt32 {
+			r = math.MinInt32
+			return
+		}
+		if m > math.MaxInt32 {
+			r = math.MaxInt32
+			return
+		}
+	}
+	r = r * symbol
+	return
+}
+
+/*
+回文数
+给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false 。
+
+回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。例如，121 是回文，而 123 不是。
+*/
+func isPalindromeV0(x int) bool {
+	if x < 0 {
+		return false
+	}
+	if x < 9 {
+		return true
+	}
+	result := x
+	temp := 0
+	for result > 0 {
+		temp = temp*10 + result%10
+		result = result / 10
+	}
+	if temp == x {
+		return true
+	}
+	return false
+}
+func isPalindrome(x int) bool {
+	// 特殊情况：
+	// 如上所述，当 x < 0 时，x 不是回文数。
+	// 同样地，如果数字的最后一位是 0，为了使该数字为回文，
+	// 则其第一位数字也应该是 0
+	// 只有 0 满足这一属性
+	if x < 0 || (x%10 == 0 && x != 0) {
+		return false
+	}
+
+	revertedNumber := 0
+	for x > revertedNumber {
+		revertedNumber = revertedNumber*10 + x%10
+		x /= 10
+	}
+
+	// 当数字长度为奇数时，我们可以通过 revertedNumber/10 去除处于中位的数字。
+	// 例如，当输入为 12321 时，在 while 循环的末尾我们可以得到 x = 12，revertedNumber = 123，
+	// 由于处于中位的数字不影响回文（它总是与自己相等），所以我们可以简单地将其去除。
+	return x == revertedNumber || x == revertedNumber/10
+}
+
+/*
+LCP 61. 气温变化趋势
+*/
+func temperatureTrend(temperatureA []int, temperatureB []int) int {
+	n := len(temperatureA)
+	ans, cur := 0, 0
+	for i := 1; i < n; i++ {
+		ta := getTrend(temperatureA[i-1], temperatureA[i])
+		tb := getTrend(temperatureB[i-1], temperatureB[i])
+		if ta == tb {
+			cur++
+			ans = max(ans, cur)
+		} else {
+			cur = 0
+		}
+	}
+	return ans
+}
+
+func getTrend(x, y int) int {
+	if x == y {
+		return 0
+	}
+	if x < y {
+		return -1
+	}
+	return 1
+}
+
 func Test() {
 	//fmt.Println(convert("PAYPALISHIRING", 2))
-	fmt.Println(reverse(123456))
+	// fmt.Println(isPalindrome(121))
+
 }

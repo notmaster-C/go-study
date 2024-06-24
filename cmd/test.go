@@ -92,7 +92,7 @@ func lengthOfLongestSubstring(s string) int {
 	return ans
 }
 
-func main() {
+func test() {
 
 	//var total int
 	//for i := 0; i < 5; i++ {

@@ -66,7 +66,7 @@ func Init() {
 			NamingStrategy: schema.NamingStrategy{TablePrefix: config.Instance.Db.Prefix},
 		})
 		if err != nil {
-			fmt.Errorf("failed to register callback: %v", err)
+			fmt.Errorf("failed to register callback: %v, dsn:%v", err,dsn)
 		}
 	} else if dbType == 1 {
 		dsn = fmt.Sprintf("%s/%s@%s:%d/%s",
