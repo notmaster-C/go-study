@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"go-study/algorithm"
+	"go-study/db"
 	"go-study/file"
 	"time"
 )
@@ -22,7 +22,8 @@ func init() {
 
 func main() {
 	//sTime := time.Now()
-	algorithm.Test()
+	// algorithm.Test()
+	db.EtcdWatch()
 	//time.Sleep(100)
 	//fmt.Println(time.Since(sTime).Seconds() * 1000)
 	//fileExam()
