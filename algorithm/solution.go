@@ -411,15 +411,15 @@ LCP 61. 气温变化趋势
 */
 func temperatureTrend(temperatureA []int, temperatureB []int) int {
 	n := len(temperatureA)
-	ans, cur := 0, 0
+	ans, arr := 0, 0
 	for i := 1; i < n; i++ {
 		ta := getTrend(temperatureA[i-1], temperatureA[i])
 		tb := getTrend(temperatureB[i-1], temperatureB[i])
 		if ta == tb {
-			cur++
-			ans = max(ans, cur)
+			arr++
+			ans = max(ans, arr)
 		} else {
-			cur = 0
+			arr = 0
 		}
 	}
 	return ans
@@ -456,8 +456,55 @@ func fraction(cont []int) []int {
 	}
 	return res
 }
+
+// LCP 03. 机器人大冒险
+// command命令 u x移动R y移动。
+// obstacles障碍物坐标
+// x，y平面大小
+func robot(command string, obstacles [][]int, x int, y int) bool {
+	// 如果目标点不在路径上，返回失败
+	if !isOnThePath(command, x, y) {
+		return false
+	}
+	for _, o := range obstacles {
+		// 判断有效的故障点是否在路径上（故障的步数大于等于目标的点，视为无效故障）
+		if (x+y > o[0]+o[1]) && isOnThePath(command, o[0], o[1]) {
+			return false
+		}
+	}
+	return true
+}
+
+func isOnThePath(command string, x int, y int) bool {
+	uNum := strings.Count(command, "U")*((x+y)/len(command)) + strings.Count(command[0:(x+y)%len(command)], "U")
+	rNum := strings.Count(command, "R")*((x+y)/len(command)) + strings.Count(command[0:(x+y)%len(command)], "R")
+	if uNum == y && rNum == x {
+		return true
+	}
+	return false
+}
+
+// 使数组元素全部相等的最少操作次数
+// 排序+前缀和+二分查找
+func minOperations(nums, queries []int) []int64 {
+	n := len(nums)
+	sort.Ints(nums)
+	sum := make([]int, n+1) // 前缀和
+	for i, x := range nums {
+		sum[i+1] = sum[i] + x
+	}
+	ans := make([]int64, len(queries))
+	for i, q := range queries {
+		j := sort.SearchInts(nums, q)
+		left := q*j - sum[j]               // 蓝色面积
+		right := sum[n] - sum[j] - q*(n-j) // 绿色面积
+		ans[i] = int64(left + right)
+	}
+	return ans
+}
+
 func Test() {
 	//fmt.Println(convert("PAYPALISHIRING", 2))
-	// fmt.Println(isPalindrome(121))
+	fmt.Println(robot("URR", [][]int{{2, 2}}, 3, 2))
 
 }
