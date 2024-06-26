@@ -503,8 +503,99 @@ func minOperations(nums, queries []int) []int64 {
 	return ans
 }
 
-func Test() {
-	//fmt.Println(convert("PAYPALISHIRING", 2))
-	fmt.Println(robot("URR", [][]int{{2, 2}}, 3, 2))
+// 2741. 特别的排列
+const MOD int64 = 1000000007
 
+func specialPerm(nums []int) int {
+	n := len(nums)
+	// 1<<n   2的n次方
+	f := make([][]int64, 1<<n)
+	for i := range f {
+		f[i] = make([]int64, n)
+	}
+	for i := 0; i < n; i++ {
+		f[1<<i][i] = 1
+	}
+
+	for state := 1; state < (1 << n); state++ {
+		for i := 0; i < n; i++ {
+			if state>>i&1 == 0 {
+				continue
+			}
+			for j := 0; j < n; j++ {
+				if i == j || state>>j&1 == 0 {
+					continue
+				}
+				x := nums[i]
+				y := nums[j]
+				if x%y != 0 && y%x != 0 {
+					continue
+				}
+				f[state][i] = (f[state][i] + f[state^(1<<i)][j]) % MOD
+			}
+		}
+	}
+
+	var sum int64
+	for i := 0; i < n; i++ {
+		sum = (sum + f[(1<<n)-1][i]) % MOD
+	}
+	return int(sum)
+}
+
+// [困难] 10. 正则表达式匹配
+func isMatch(s string, p string) bool {
+	m, n := len(s), len(p)
+	matches := func(i, j int) bool {
+		if i == 0 {
+			return false
+		}
+		if p[j-1] == '.' {
+			return true
+		}
+		return s[i-1] == p[j-1]
+	}
+
+	f := make([][]bool, m+1)
+	for i := 0; i < len(f); i++ {
+		f[i] = make([]bool, n+1)
+	}
+	f[0][0] = true
+	for i := 0; i <= m; i++ {
+		for j := 1; j <= n; j++ {
+			if p[j-1] == '*' {
+				f[i][j] = f[i][j] || f[i][j-2]
+				if matches(i, j-1) {
+					f[i][j] = f[i][j] || f[i-1][j]
+				}
+			} else if matches(i, j) {
+				f[i][j] = f[i][j] || f[i-1][j-1]
+			}
+		}
+	}
+	return f[m][n]
+}
+
+// 递归解法
+func isMatchV1(s string, p string) bool {
+	return dfs(s, p, len(s)-1, len(p)-1)
+}
+
+func dfs(s, p string, i, j int) bool {
+	if j < 0 {
+		return i < 0
+	}
+	if p[j] == '*' {
+		if i < 0 || (p[j-1] != '.' && p[j-1] != s[i]) {
+			return dfs(s, p, i, j-2)
+		}
+		return dfs(s, p, i-1, j) || dfs(s, p, i, j-2)
+	}
+	if i < 0 {
+		return false
+	}
+	if p[j] == '.' || s[i] == p[j] {
+		return dfs(s, p, i-1, j-1)
+	}
+	return false
 }

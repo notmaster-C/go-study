@@ -1,12 +1,13 @@
-package utils
+package oss
 
 import (
 	"fmt"
-	"github.com/minio/minio-go"
 	"log"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/minio/minio-go"
 )
 
 var MinioClientGlobal *MinioClient

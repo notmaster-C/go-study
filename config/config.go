@@ -2,9 +2,16 @@ package config
 
 import (
 	"fmt"
+	"strings"
+
+	logging "go-study/log"
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"strings"
+)
+
+var (
+	log = logging.Logger("config")
 )
 
 // 结构定义从小到大省空间....不是必要
@@ -41,9 +48,18 @@ type Redis struct {
 	PoolSize   int
 	Channel    string
 }
+type Log struct {
+	Path    string
+	Cutting string
+	MaxSize int
+	Console bool
+	Level   string
+}
 type ConfigValue struct {
-	Db Db
-	S3 S3
+	Db    Db
+	S3    S3
+	Redis Redis
+	Log   Log
 }
 
 var Instance = new(ConfigValue)
@@ -55,7 +71,7 @@ func Init() {
 	// 设置配置文件的类型
 	v.SetConfigType("yml")
 	// 添加配置文件的路径，指定 config 目录下寻找
-	v.AddConfigPath("./config")
+	v.AddConfigPath("../config")
 	// 寻找配置文件并读取
 	err := v.ReadInConfig()
 	if err != nil {
@@ -93,4 +109,18 @@ func Init() {
 	Instance.S3.Ssl = v.GetBool("s3.useSsl")
 	Instance.S3.Version = strings.ToUpper(v.GetString("s3.version"))
 	Instance.S3.PrefixPath = v.GetString("s3.path")
+
+	// redis
+	Instance.Redis.Addr = v.GetString("redis.addr")
+	Instance.Redis.Port = v.GetInt("redis.port")
+	Instance.Redis.Passwd = v.GetString("redis.passwd")
+	Instance.Redis.PoolSize = v.GetInt("redis.poolSize")
+	Instance.Redis.MaxRetries = v.GetInt("redis.maxRetries")
+
+	// log
+	Instance.Log.Path = v.GetString("log.path")
+	Instance.Log.Cutting = v.GetString("log.cutting")
+	Instance.Log.MaxSize = v.GetInt("log.maxsize")
+	Instance.Log.Console = v.GetBool("log.console")
+	Instance.Log.Level = v.GetString("log.level")
 }

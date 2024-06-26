@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"os"
 	"strings"
@@ -138,12 +137,12 @@ func test() {
 	//}】
 	//
 
-	start := time.Now()
-	wg.Wait()
-	go search("E:\\csl\\", true)
-	waitWork()
-	fmt.Println(matches)
-	fmt.Println(time.Since(start))
+	// start := time.Now()
+	// wg.Wait()
+	// go search("E:\\csl\\", true)
+	// waitWork()
+	// fmt.Println(matches)
+	// fmt.Println(time.Since(start))
 
 	//list := []db.AssitantBooks{}
 	//db.GetDb("mysql").Model(&db.AssitantBooks{}).Limit(1).Find(&list)

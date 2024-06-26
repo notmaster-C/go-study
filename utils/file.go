@@ -3,9 +3,10 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"github.com/bwmarrin/snowflake"
 	"sync"
 	"time"
+
+	"github.com/bwmarrin/snowflake"
 )
 
 const (
@@ -118,9 +119,4 @@ func GetSnowflakeString() string {
 	)
 	id := snowflakeNode.Generate()
 	return fmt.Sprintf("%d", id.Int64())
-}
-
-// Now 系统当前时间戳（毫秒）
-func Now() int64 {
-	return time.Now().UnixNano() / int64(time.Millisecond)
 }
