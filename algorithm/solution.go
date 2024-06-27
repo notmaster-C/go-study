@@ -599,3 +599,53 @@ func dfs(s, p string, i, j int) bool {
 	}
 	return false
 }
+
+// 盛最多水的容器
+func maxArea(height []int) int {
+	l := 0
+	r := len(height) - 1
+	t := 0
+	for l < r {
+		t = max(min(height[l], height[r])*(r-l), t)
+		if height[l] < height[r] {
+			l++
+		} else {
+			r--
+		}
+	}
+	return t
+}
+
+// 整数转罗马数字
+var valueSymbols = []struct {
+	value  int
+	symbol string
+}{
+	{1000, "M"},
+	{900, "CM"},
+	{500, "D"},
+	{400, "CD"},
+	{100, "C"},
+	{90, "XC"},
+	{50, "L"},
+	{40, "XL"},
+	{10, "X"},
+	{9, "IX"},
+	{5, "V"},
+	{4, "IV"},
+	{1, "I"},
+}
+
+func intToRoman(num int) string {
+	roman := []byte{}
+	for _, vs := range valueSymbols {
+		for num >= vs.value {
+			num -= vs.value
+			roman = append(roman, vs.symbol...)
+		}
+		if num == 0 {
+			break
+		}
+	}
+	return string(roman)
+}

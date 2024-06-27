@@ -3,35 +3,30 @@ package main
 import (
 	"context"
 	"fmt"
-	"go-study/cache"
-	"go-study/config"
+	"go-study/algorithm"
 	"go-study/file"
-	"go-study/utils"
-	"strings"
 	"time"
-
-	logging "go-study/log"
 )
 
 func init() {
-	config.Init()
+	// config.Init()
 	//todo:常量进行基础赋值初始化
 	// constant.Init()
 	// 设置日志规则
-	logFile := "go_study.log"
-	logFileName := strings.Join([]string{config.Instance.Log.Path, logFile}, "/")
-	logging.SetupLogFile(
-		logFileName,
-		config.Instance.Log.Cutting,
-		int64(config.Instance.Log.MaxSize),
-		config.Instance.Log.Console)
-	logging.SetLogLevel("*", config.Instance.Log.Level)
+	// logFile := "go_study.log"
+	// logFileName := strings.Join([]string{config.Instance.Log.Path, logFile}, "/")
+	// logging.SetupLogFile(
+	// 	logFileName,
+	// 	config.Instance.Log.Cutting,
+	// 	int64(config.Instance.Log.MaxSize),
+	// 	config.Instance.Log.Console)
+	// logging.SetLogLevel("*", config.Instance.Log.Level)
 }
 
 func main() {
 	// db.Init()
 	//db.GetDB().AutoMigrate(&db.File{})
-	cache.InitRedis(&config.Instance.Redis)
+	// cache.InitRedis(&config.Instance.Redis)
 	//route.InitRoute()
 
 	Test()
@@ -39,8 +34,8 @@ func main() {
 func Test() {
 	fmt.Println("test...")
 	//sTime := time.Now()
-	// algorithm.Test()
-	utils.GithubFlush()
+	algorithm.Test()
+	// utils.GithubFlush()
 	// db.EtcdWatch()
 	//time.Sleep(100)
 	//fmt.Println(time.Since(sTime).Seconds() * 1000)
