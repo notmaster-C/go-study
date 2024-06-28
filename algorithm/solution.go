@@ -649,3 +649,114 @@ func intToRoman(num int) string {
 	}
 	return string(roman)
 }
+
+// 2742. 给墙壁刷油漆
+
+// 给墙壁刷油漆
+// 给你两个长度为 n 下标从 0 开始的整数数组 cost 和 time ，分别表示给 n 堵不同的墙刷油漆需要的开销和时间。你有两名油漆匠：
+//   - 一位需要 付费 的油漆匠，刷第 i 堵墙需要花费 time[i] 单位的时间，开销为 cost[i] 单位的钱。
+//   - 一位 免费 的油漆匠，刷 任意 一堵墙的时间为 1 单位，开销为 0 。但是必须在付费油漆匠 工作 时，免费油漆匠才会工作。
+//
+// 请你返回刷完 n 堵墙最少开销为多少。
+// https://leetcode.cn/problems/painting-the-walls
+func paintWalls(cost []int, time []int) int {
+
+	return paintWalls2(cost, time)
+}
+
+func paintWalls1(cost []int, time []int) int {
+
+	// dp在每个位置做出方案 在结尾的时候判断方案是否合理 + memo偏移
+
+	// 免费的油漆匠依赖付费的油漆匠, 但不依赖具体的, 只依赖的时间, 只要付费的时间 > 免费的时间即可
+	// dfs(i, payTime, freeTime) 三个参数可以优化为2个 deltaTime = payTime-freeTime,只要最后的时候 deltaTime>=0即可
+
+	n := len(cost)
+	inf := math.MaxInt / 2 // 有加法, inf适当减小
+
+	memo := make([][]int, n)
+	for i := range memo {
+		memo[i] = make([]int, 2*n+1) // trick!! 只要 delta>=n,那么可以免费刷所有的墙,j绝不会超过n,但 payTime[i]可能超过,这种情况下,不让其访问到memo,直接返回
+		for j := range memo[i] {
+			memo[i][j] = -1
+		}
+	}
+
+	offset := n
+	var dfs func(i, delta int) int
+	dfs = func(i, delta int) int {
+		if i == n {
+			// 注意!! 方案合不合法在最后的位置判断, delta>=0才合法,
+			if delta >= offset {
+				return 0
+			} else {
+				return inf
+			}
+		}
+
+		if delta-offset >= n-i { // trick!! 剪枝,因为免费不增加cost,所以能免费时肯定免费
+			return 0
+		}
+
+		if memo[i][delta] != -1 {
+			return memo[i][delta]
+		}
+
+		// 选择付费
+		res := dfs(i+1, delta+time[i]) + cost[i]
+
+		// 选择免费
+		res = min(res, dfs(i+1, delta-1))
+
+		memo[i][delta] = res
+		return res
+	}
+	ans := dfs(0, offset) // trick!! 因为需要使用memo保存中间结果,但delta可能是负数(前面全选择免费,中间一个选择付费),所以偏移n,让memo的deltaIdx不会为负数
+	return ans
+}
+
+func paintWalls2(cost []int, time []int) int {
+
+	// 0-1背包
+	// 付费个数 + 免费个数 = n
+	// 付费时间 >= 免费时间=免费个数
+	// 付费时间 >= n-付费个数
+	// (付费时间+1) >=n
+	// time[i]+1 为物品体积 cost[i]为物品价值, 体积>=n的情况下,价值最小是多少
+
+	n := len(cost)
+	f := make([]int, n+1) // j: 0->i号物品,选于不选(付费还是免费)的情况下, 体积>=j时,能获取的最少收益
+	for j := range f {
+		f[j] = math.MaxInt / 2 // 一个物品不选时,体检不可能>j,所以设置为极大值(防止后面加法溢出 inf/2)
+	}
+	f[0] = 0
+
+	s := 0
+	for i, c := range cost {
+		t := time[i] + 1
+		s += t
+		for j := min(s, n); j > 0; j-- {
+			f[j] = min(f[j], f[max(0, j-t)]+c) // 选与不选
+		}
+	}
+	return f[n]
+}
+
+// 2766. 重新放置石块
+func relocateMarbles(nums []int, moveFrom []int, moveTo []int) []int {
+	set := map[int]interface{}{}
+	for _, i := range nums {
+		set[i] = 0
+	}
+	for k, i := range moveFrom {
+		delete(set, i)
+		set[moveTo[k]] = 0
+	}
+	res := make([]int, 0, len(set))
+	for k := range set {
+		res = append(res, k)
+	}
+	sort.Ints(res)
+	return res
+
+}
