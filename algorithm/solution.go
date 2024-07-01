@@ -760,3 +760,32 @@ func relocateMarbles(nums []int, moveFrom []int, moveTo []int) []int {
 	return res
 
 }
+
+// 88. 合并两个有序数组
+func merge(nums1 []int, m int, nums2 []int, n int) {
+	l := len(nums1) - 1
+	for n > 0 {
+		if m > 0 && nums1[m-1] > nums2[n-1] {
+			nums1[l] = nums1[m-1]
+			m--
+			l--
+		} else {
+			nums1[l] = nums2[n-1]
+			l--
+			n--
+		}
+	}
+}
+
+// 27. 移除元素
+func removeElement(nums []int, val int) int {
+	n := len(nums)
+	left := 0
+	for right := 0; right < n; right++ {
+		if nums[right] != val {
+			nums[left] = nums[right]
+			left++
+		}
+	}
+	return left
+}
