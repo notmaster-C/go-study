@@ -789,3 +789,36 @@ func removeElement(nums []int, val int) int {
 	}
 	return left
 }
+
+// 26. 删除有序数组中的重复项
+func removeDuplicatesV0(nums []int) (l int) {
+	ans := nums[0] - 1
+	nums2 := make([]int, len(nums))
+	for _, v := range nums {
+		if ans == v {
+			continue
+		}
+		ans = v
+		nums2[l] = v
+		l++
+	}
+	nums = nums2
+	fmt.Println(nums)
+	return
+}
+func removeDuplicates(nums []int) int {
+	n := len(nums)
+	if n == 0 {
+		return 0
+	}
+	slow := 1
+	for fast := 1; fast < n; fast++ {
+		if nums[fast] != nums[fast-1] {
+			nums[slow] = nums[fast]
+			slow++
+		}
+	}
+	return slow
+}
+
+// 80. 删除有序数组中的重复项 II

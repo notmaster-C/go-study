@@ -11,10 +11,10 @@
 #  showSql: true
 #  DbType: 0
 db:
-  host: localhost
+  host: 192.168.10.47
   port: 3306
-  user: root
-  passwd: 123456
+  user: baiduyun
+  passwd: Baiduyun@123
   dbName: bigdata_core
   prefix: bigdata_
   maxConn: 20
@@ -30,9 +30,9 @@ db:
   # - db 数据库
   # - maxRetries 最大重试次数
 redis:
-  addr: 127.0.0.1
-  port: 16379
-  passwd:
+  addr: 192.168.110.127
+  port: 6379
+  passwd: 123456
   db: 1
   maxRetries: 5
   poolSize: 10
@@ -53,3 +53,16 @@ s3:
   version: V2
   path: big-data
   useSsl: false
+
+# log
+# - path 日志保存路径
+# - cutting 日志切割规则 [按年:y 按月:m 按天:d 按小时:h]
+# - maxsize 单个日志文件最大值 [单位kb]
+# - console 是否控制台输出 [true:日志输出到控制台 false:日志保存到文件]
+# - level日志等级 [DEBUG INFO NOTICE WARNING ERROR]
+#   生产环境可修改为: ERROR
+log:
+  path: /home/notmastr/logs
+  maxsize: 1048576
+  console: true
+  level: DEBUG

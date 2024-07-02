@@ -4,12 +4,13 @@ import (
 	"context"
 	"fmt"
 	"go-study/algorithm"
+	"go-study/config"
 	"go-study/file"
 	"time"
 )
 
 func init() {
-	// config.Init()
+	config.Init()
 	//todo:常量进行基础赋值初始化
 	// constant.Init()
 	// 设置日志规则

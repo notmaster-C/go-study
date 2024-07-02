@@ -10,14 +10,20 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/go-redis/redis/v8"
 )
 
+var ips = []string{"20.205.243.166", "140.82.114.4"}
+
 func GithubFlush() {
-	// 创建channel用于接收IP和延迟结果,错误[3]interface{ip,where_from_0host_1dns,err}
+	// 创建channel用于接收IP和延迟结果,错误[3]interface{ip,where_from|0_host&1_dns,err}
 	resultsCh := make(chan [3]interface{}, 10)
 	var wg sync.WaitGroup
 	RCli := cache.RCli()
 	ctx := context.Background()
+	// 清除排行榜
+	RCli.ZDiff(ctx, "github_latency")
 	// 从hosts文件读取IP地址
 	wg.Add(1)
 	go func() {
@@ -25,11 +31,17 @@ func GithubFlush() {
 		readHostsFile("/etc/hosts", "github.com", resultsCh)
 	}()
 	// 解析DNS获取IP地址
-	// wg.Add(1)
-	// go func() {
-	// 	defer wg.Done()
-	// 	resolveDNS("github.com", resultsCh)
-	// }()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		resolveDNS("github.com", resultsCh)
+	}()
+	// 自定义ip
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		resultsCh <- [3]interface{}{nil, 1, nil}
+	}()
 	// 开始接收和处理结果
 
 	go func() {
@@ -38,15 +50,14 @@ func GithubFlush() {
 			fmt.Println("add 1 worker")
 			fmt.Println("result:", result)
 			ipStr := ToString(result[0])
-			go testLatency(ipStr, &wg)
-			// todo:这里有问题，wg.done少结束2个
-			// latency := ToFloat64(result[1])
-			// if latency != 0 {
-			// 	RCli.ZAdd(ctx, "github_latency", &redis.Z{
-			// 		Score:  latency,
-			// 		Member: ipStr,
-			// 	})
-			// }
+			latency, _ := testLatency(ipStr, &wg)
+
+			if latency != 0 {
+				RCli.ZAdd(ctx, "github_latency", &redis.Z{
+					Score:  latency,
+					Member: ipStr,
+				})
+			}
 		}
 	}()
 
@@ -54,7 +65,7 @@ func GithubFlush() {
 	wg.Wait()
 
 	// 获取延迟最小的一条...默认只有五条
-	ranking, err := RCli.ZRangeWithScores(ctx, "github_latency", 0, 0).Result()
+	ranking, err := RCli.ZRangeWithScores(ctx, "github_latency", 0, 10).Result()
 	if err != nil {
 		fmt.Println("ZRangeWithScores error:", err)
 	}
@@ -97,7 +108,8 @@ func resolveDNS(domain string, resultsCh chan<- [3]interface{}) {
 	}
 
 	for _, addr := range addrs {
-		resultsCh <- [3]interface{}{addr, 1, nil}
+		fmt.Println(addr)
+		// resultsCh <- [3]interface{}{addr, 1, nil}
 		// testLatencyAndSendResult(addr.String(), resultsCh)
 	}
 }
