@@ -2,13 +2,14 @@ package file
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"go-study/common"
 	"go-study/db"
 	"go-study/oss"
 	"path/filepath"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 func UploadFile(inFileIds []string) {

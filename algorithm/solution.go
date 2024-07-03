@@ -822,3 +822,18 @@ func removeDuplicates(nums []int) int {
 }
 
 // 80. 删除有序数组中的重复项 II
+
+// 169. 多数元素
+func majorityElement(nums []int) int {
+	n := len(nums) / 2
+	ans, count := 0, 0
+	nums2 := make(map[int]int, n)
+	for _, v := range nums {
+		nums2[v]++
+		if nums2[v] > count {
+			count = nums2[v]
+			ans = v
+		}
+	}
+	return ans
+}

@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"go-study/algorithm"
 	"go-study/config"
+	"go-study/db"
 	"go-study/file"
+	"go-study/route"
+	"go-study/utils"
 	"time"
 )
 
@@ -25,12 +28,11 @@ func init() {
 }
 
 func main() {
-	// db.Init()
-	//db.GetDB().AutoMigrate(&db.File{})
-	// cache.InitRedis(&config.Instance.Redis)
-	//route.InitRoute()
+	db.Init()
 
-	Test()
+	// cache.InitRedis(&config.Instance.Redis)
+	route.InitRoute()
+	// Test()
 }
 func Test() {
 	fmt.Println("test...")
@@ -60,6 +62,18 @@ func Test() {
 	//	fmt.Println(res)
 	//}
 
+}
+func dbTest() {
+	// 实测create和createInbatch都是一次insert多条
+	// db.GetDB().AutoMigrate(&db.TestFile{})
+	file := []*db.TestFile{}
+	for i := 0; i < 10; i++ {
+		file = append(file, &db.TestFile{
+			Name: "test" + utils.ToString(i),
+		})
+	}
+	err := db.GetDB().Model(&db.TestFile{}).CreateInBatches(file, 10).Error
+	fmt.Println(err)
 }
 func isGraduated(xgh string) bool {
 	return false

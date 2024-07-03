@@ -1,8 +1,10 @@
 package route
 
 import (
-	"github.com/gin-gonic/gin"
 	"go-study/file"
+	"go-study/unioffice"
+
+	"github.com/gin-gonic/gin"
 )
 
 func InitRoute() {
@@ -10,7 +12,7 @@ func InitRoute() {
 	r.Any("/test", handleTest5)
 	api := r.Group("/api")
 	{
-		//api.Any("/test", handleTest5)
+		api.Any("/test", unioffice.TestUnioffice)
 		//api.Any("/update", handleSetSswwg)
 		//api.Any("/get", handleGet)
 		file.InitRoute(api)

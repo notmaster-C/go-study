@@ -11,11 +11,11 @@
 #  showSql: true
 #  DbType: 0
 db:
-  host: 192.168.10.47
+  host: 192.168.110.127
   port: 3306
-  user: baiduyun
-  passwd: Baiduyun@123
-  dbName: bigdata_core
+  user: yshop_go
+  passwd: DFZFdaRQRf8HRmtP
+  dbName: yshop_go
   prefix: bigdata_
   maxConn: 20
   maxIdleConn: 20
