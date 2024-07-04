@@ -7,7 +7,6 @@ import (
 	"go-study/config"
 	"go-study/db"
 	"go-study/file"
-	"go-study/route"
 	"go-study/utils"
 	"time"
 )
@@ -28,11 +27,11 @@ func init() {
 }
 
 func main() {
-	db.Init()
+	// db.Init()
 
 	// cache.InitRedis(&config.Instance.Redis)
-	route.InitRoute()
-	// Test()
+	// route.InitRoute()
+	Test()
 }
 func Test() {
 	fmt.Println("test...")

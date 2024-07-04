@@ -155,7 +155,7 @@ func find(nums1 []int, i int, nums2 []int, j int, k int) int {
 	if len(nums1) == i {
 		return nums2[j+k-1]
 	}
-	si := min(len(nums1), i+k/2)
+	si := minInt(len(nums1), i+k/2)
 	sj := j + k - k/2
 	//通过比较nums1[si-1]和nums[sj-1]，可以删除最小的部分
 	if nums1[si-1] > nums2[sj-1] {
@@ -167,7 +167,7 @@ func find(nums1 []int, i int, nums2 []int, j int, k int) int {
 	}
 }
 
-func min(a, b int) int {
+func minInt(a, b int) int {
 	if a < b {
 		return a
 	}
@@ -806,7 +806,7 @@ func removeDuplicatesV0(nums []int) (l int) {
 	fmt.Println(nums)
 	return
 }
-func removeDuplicates(nums []int) int {
+func removeDuplicatesV1(nums []int) int {
 	n := len(nums)
 	if n == 0 {
 		return 0
@@ -822,6 +822,20 @@ func removeDuplicates(nums []int) int {
 }
 
 // 80. 删除有序数组中的重复项 II
+func removeDuplicates(nums []int) int {
+	n := len(nums)
+	if n <= 2 {
+		return n
+	}
+	slow := 2
+	for fast := 2; fast < n; fast++ {
+		if nums[fast] != nums[slow-2] {
+			nums[slow] = nums[fast]
+			slow++
+		}
+	}
+	return slow
+}
 
 // 169. 多数元素
 func majorityElement(nums []int) int {
@@ -836,4 +850,75 @@ func majorityElement(nums []int) int {
 		}
 	}
 	return ans
+}
+
+// 189. 轮转数组
+func rotate(nums []int, k int) {
+	newNums := make([]int, len(nums))
+	for i, v := range nums {
+		newNums[(i+k)%len(nums)] = v
+	}
+	copy(nums, newNums)
+}
+
+// 3086. 拾起 K 个 1 需要的最少行动次数
+func minimumMoves(nums []int, k int, maxChanges int) int64 {
+	n := len(nums)
+	f := func(i int) int {
+		x := nums[i]
+		if i-1 >= 0 {
+			x += nums[i-1]
+		}
+		if i+1 < n {
+			x += nums[i+1]
+		}
+		return x
+	}
+
+	left, right := 0, -1
+	leftSum, rightSum := int64(0), int64(0)
+	leftCount, rightCount := int64(0), int64(0)
+	var res int64 = math.MaxInt64
+	for i := 0; i < n; i++ {
+		if f(i)+maxChanges >= k {
+			if k <= f(i) {
+				res = min(res, int64(k-nums[i]))
+			} else {
+				res = min(res, int64(2*k-f(i)-nums[i]))
+			}
+		}
+		if k <= maxChanges {
+			continue
+		}
+		for right+1 < n && (right-i < i-left || leftCount+rightCount+int64(maxChanges) < int64(k)) {
+			if nums[right+1] == 1 {
+				rightCount++
+				rightSum += int64(right) + 1
+			}
+			right++
+		}
+		for leftCount+rightCount+int64(maxChanges) > int64(k) {
+			if right-i < i-left || right-i == i-left && nums[left] == 1 {
+				if nums[left] == 1 {
+					leftCount--
+					leftSum -= int64(left)
+				}
+				left++
+			} else {
+				if nums[right] == 1 {
+					rightCount--
+					rightSum -= int64(right)
+				}
+				right--
+			}
+		}
+		res = min(res, leftCount*int64(i)-leftSum+rightSum-rightCount*int64(i)+2*int64(maxChanges))
+		if nums[i] == 1 {
+			leftCount++
+			leftSum += int64(i)
+			rightCount--
+			rightSum -= int64(i)
+		}
+	}
+	return res
 }
