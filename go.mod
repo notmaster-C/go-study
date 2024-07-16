@@ -15,6 +15,7 @@ require (
 	github.com/minio/minio-go/v7 v7.0.70
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/spf13/viper v1.18.2
+	github.com/unidoc/unioffice v1.34.0
 	github.com/whyrusleeping/go-logging v0.0.1
 	gorm.io/driver/mysql v1.3.5
 	gorm.io/gorm v1.23.8
@@ -24,7 +25,8 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/unidoc/unioffice v1.34.0 // indirect
+	github.com/godror/godror v0.33.3 // indirect
+	github.com/godror/knownpb v0.1.0 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.14 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.14 // indirect
 )
@@ -47,8 +49,6 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
-	github.com/godror/godror v0.33.3 // indirect
-	github.com/godror/knownpb v0.1.0 // indirect
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect

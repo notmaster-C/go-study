@@ -4,9 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
-	"github.com/go-resty/resty/v2"
 	"go-study/db"
 	"go-study/utils"
 	"net/http"
@@ -14,6 +11,10 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-resty/resty/v2"
 )
 
 type MSG struct {
@@ -34,12 +35,12 @@ func handleTest(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	qbd := db.GetDb("mysql")
+	qbd := db.GetDB()
 	//qbd.AutoMigrate(&db.ApiDbMiddleSource{})
 	qbd.AutoMigrate(&db.Records{})
 
 	for _, record := range data.Result.Records {
-		db.GetDb("mysql").Table("Records").Create(record)
+		db.GetDB().Table("Records").Create(record)
 	}
 	c.JSON(http.StatusOK, gin.H{"Result:": data.Result.Records[0]})
 
@@ -140,7 +141,7 @@ func handleTest2(c *gin.Context) {
 		err    error
 		result = gin.H{}
 		rows   *sql.Rows
-		sdb    = db.GetDb("mysql")
+		sdb    = db.GetDB()
 		sql    string
 	)
 	defer func() {
@@ -209,7 +210,7 @@ func handleSetSswwg(c *gin.Context) {
 		return
 	}
 	var sswwgt *db.SSWWG
-	db.GetDb("mysql").Model(&db.SSWWG{}).Where("id=?", 1).First(&sswwgt)
+	db.GetDB().Model(&db.SSWWG{}).Where("id=?", 1).First(&sswwgt)
 	if req.OutbeginDate != "" {
 		sswwgt.OutbeginDate = req.OutbeginDate
 	}
@@ -298,24 +299,24 @@ func hanleGetSSWWGXY(c *gin.Context) {
 			rows.Close()
 		}
 	}()
-	rows, _ = db.GetDb("mysql").Table("bigdata_middle_data").Where("key_info=? and ex8_name=?", req.Key).Group("ex3").Rows()
+	rows, _ = db.GetDB().Table("bigdata_middle_data").Where("key_info=? and ex8_name=?", req.Key).Group("ex3").Rows()
 	//-- `key` result年级 ex1 进出异常  ex2 学号姓名 ex3 学院 ex4 校区 ex5 所住苑区 ex6 所住楼栋 ex7 所住房间号 ex8日期,ex8_name 是否研究生,ex9 学院总人数
 	if len(req.Xh) == 0 {
 		//这一判断表示非请求用户详细信息
 		if len(req.XueyuanId) == 0 {
 			if len(req.StartTime) == 0 {
-				rows, _ = db.GetDb("mysql").Table("bigdata_middle_data").Where("key_info=? and ex8_name=?", req.Key, req.StuType).Group("ex3").Rows()
+				rows, _ = db.GetDB().Table("bigdata_middle_data").Where("key_info=? and ex8_name=?", req.Key, req.StuType).Group("ex3").Rows()
 				//sql := "SELECT sum(ex1) as in_all,sum(ex1_name) as out_all,ex3_name as 'name',ex3 as 'code' from bigdata_middle_data WHERE key_info=? and ex8_name=? GROUP BY ex3"
-				//rows, _ := db.GetDb("mysql").Raw(sql, req.Key, req.StuType).Rows()
+				//rows, _ := db.GetDB().Raw(sql, req.Key, req.StuType).Rows()
 				return
 			} else if len(req.EndTime) == 0 {
 				sql := "SELECT sum(ex1) as in_all,sum(ex1_name) as out_all,ex3_name as 'name',ex3 as 'code' from bigdata_middle_data WHERE key_info=? and ex8_name=? and ex8 =? GROUP BY ex3"
-				rows, _ = db.GetDb("mysql").Raw(sql, req.Key, req.StuType, req.StartTime).Rows()
+				rows, _ = db.GetDB().Raw(sql, req.Key, req.StuType, req.StartTime).Rows()
 				return
 			}
 			if len(req.NianjiName) > 0 {
 				sql := "SELECT sum(ex1) as in_all,sum(ex1_name) as out_all,ex3_name as 'name',ex3 as 'code' from bigdata_middle_data WHERE key_info=? and ex8_name=? and ex8 between ? and ? GROUP BY ex3"
-				rows, _ = db.GetDb("mysql").Raw(sql, req.Key, req.StuType, req.StartTime, req.EndTime).Rows()
+				rows, _ = db.GetDB().Raw(sql, req.Key, req.StuType, req.StartTime, req.EndTime).Rows()
 				return
 			}
 

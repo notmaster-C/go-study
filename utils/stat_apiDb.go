@@ -3,10 +3,11 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-resty/resty/v2"
 	"go-study/db"
 	"net/http"
 	"strings"
+
+	"github.com/go-resty/resty/v2"
 )
 
 type apiAndDb struct {
@@ -24,7 +25,6 @@ const (
 	contentTypeJson         = "application/json"
 )
 
-// {"host":"http://202.115.158.71:8770", "authType":"headerBearerToken", "token":"PanguSuperAdmin@2020"}
 type apiInfo struct {
 	Host     string `json:"host"`
 	AuthType string `json:"authType"`
@@ -49,7 +49,7 @@ func getClient(ck string) *resty.Request {
 	return nil
 }
 func refreshStat(sid int64, value string) {
-	err := db.GetDb("mysql").Model(&db.StatReport{}).Where("id = ?", sid).Update("value", value).Error
+	err := db.GetDB().Model(&db.StatReport{}).Where("id = ?", sid).Update("value", value).Error
 	if err != nil {
 		fmt.Errorf("failed to update stat-report statId:%v value:%v error:%v", sid, value, err)
 	}
@@ -103,7 +103,7 @@ func ExecuteStatApiDb(data *db.StatDataSource) error {
 		return err
 	}
 	if resp.StatusCode() == http.StatusOK {
-		statDb := db.GetDb("mysql")
+		statDb := db.GetDB()
 
 		for _, record := range xjt1.Result.Records {
 			statDb.Migrator().AutoMigrate(&record)

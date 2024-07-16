@@ -2,8 +2,9 @@ package db
 
 import (
 	"fmt"
-	"github.com/dzwvip/oracle"
 	"go-study/config"
+
+	"github.com/dzwvip/oracle"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -12,43 +13,10 @@ import (
 
 var prefix = "bigdata_"
 
-// {"db_type":"oracle", "db_host":"202.115.154.76", "db_port":1521, "db_user":"ODS", "db_pass":"XjODS123","db_name":"XJSJZXDB"}
 var (
 	DB  *gorm.DB
 	err error
 )
-
-// 获取对应的db
-func GetDb(dbType string) *gorm.DB {
-	var (
-		pwd string
-		dsn string
-		db  *gorm.DB
-	)
-	if dbType == "mysql" {
-		pwd = "mysql@123qaz"
-		dsn = fmt.Sprintf("yunpan:%s@tcp(202.115.158.100:3306)/bigdata_dudao?charset=utf8&parseTime=true", pwd)
-		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
-			NamingStrategy: schema.NamingStrategy{TablePrefix: prefix},
-		})
-	} else if dbType == "oracle" {
-		pwd = "XjODS123"
-		dsn = fmt.Sprintf("ODS/%s@202.115.154.76:1521/XJSJZXDB", pwd)
-		db, err = gorm.Open(oracle.Open(dsn))
-	} else if dbType == "mysql2" {
-		pwd = "Baiduyun@123"
-		dsn = fmt.Sprintf("baiduyun:%s@tcp(192.168.10.47:3306)/bigdata_dudao?charset=utf8&parseTime=true", pwd)
-		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
-			NamingStrategy: schema.NamingStrategy{TablePrefix: prefix},
-		})
-		if err != nil {
-			fmt.Errorf("failed to register callback: %v", err)
-			return nil
-		}
-	}
-	db.Logger.LogMode(0)
-	return db.Debug()
-}
 
 func GetDB() *gorm.DB {
 	return DB.Debug()
@@ -66,7 +34,7 @@ func Init() {
 			NamingStrategy: schema.NamingStrategy{TablePrefix: config.Instance.Db.Prefix},
 		})
 		if err != nil {
-			fmt.Errorf("failed to register callback: %v, dsn:%v", err,dsn)
+			fmt.Errorf("failed to register callback: %v, dsn:%v", err, dsn)
 		}
 	} else if dbType == 1 {
 		dsn = fmt.Sprintf("%s/%s@%s:%d/%s",

@@ -8,7 +8,7 @@ import (
 )
 
 func DbflFile() {
-	rows, err := db.GetDb("mysql").Table("T_GXZS_ZSXXB_X").Where("XQ=?", "校区").Rows()
+	rows, err := db.GetDB().Table("T_GXZS_ZSXXB_X").Where("XQ=?", "校区").Rows()
 	if err != nil {
 		fmt.Println("数据库查询错误")
 	}

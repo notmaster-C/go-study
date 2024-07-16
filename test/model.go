@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
 	"math"
@@ -91,66 +91,6 @@ func lengthOfLongestSubstring(s string) int {
 	return ans
 }
 
-func test() {
-
-	//var total int
-	//for i := 0; i < 5; i++ {
-	//	total += i
-	//	fmt.Println(total)
-	//}
-	//s := "abcabcbb"
-	//fmt.Println(lengthOfLongestSubstring(s))
-
-	//executeStatDb(1261)
-	//gin
-	//r := gin.Default()
-	//route.InitRoute(r)
-	//r.Run()
-	//gweb
-	//sdb := db.GetDb()
-	//var sds []*db.StatDataSource
-	//rows := sdb.Where("`key`=?", "testapi").Find(&db.StatDataSource{})
-	//rows.Scan(&sds)
-	//utils.ExecuteStatApiDb(sds[0])
-	//r := gin.Default()
-	//route.InitRoute(r)
-	//r.Run(":8080")
-	// rows, _ := db.GetDb("mysql").Raw("delete from bigdata_middle_data where key_info = 'book_yjs_borrow';insert into bigdata_middle_data select ").Rows()
-	// if rows != nil {
-	// 	rowse := route.ScanRows2map2(rows)
-	// 	jsonString, _ := json.Marshal(rowse)
-	// 	result1 := string(jsonString)
-	// 	fmt.Println(result1)
-	// 	rows.Close()
-	// }
-
-	//生成一个字符串长度为8的最随机字符串数组ss，数组大小为len
-	//len := 10
-	//menus := map[int]string{}
-	//fmt.Println(len)
-	//rand.Seed(time.Now().UnixNano()) //初始化种子
-	//for len > 0 {
-	//	i := randomString(8)
-	//	fmt.Println("len:", len, i) //打印
-	//	menus[len-1] = i
-	//	len--
-	//}】
-	//
-
-	// start := time.Now()
-	// wg.Wait()
-	// go search("E:\\csl\\", true)
-	// waitWork()
-	// fmt.Println(matches)
-	// fmt.Println(time.Since(start))
-
-	//list := []db.AssitantBooks{}
-	//db.GetDb("mysql").Model(&db.AssitantBooks{}).Limit(1).Find(&list)
-	//info, _ := json.Marshal(list)
-	//infos := string(info)
-	//fmt.Println(infos)
-
-}
 func waitWork() {
 	for {
 		select {

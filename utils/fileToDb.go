@@ -154,7 +154,7 @@ func InsertData(data []NetLog_OnlineDtail) error {
 
 // BulkInsertData 批量插入方法
 func BulkInsertData(data []NetLog_OnlineDtail) error {
-	sdb := db.GetDb("mysql")
+	sdb := db.GetDB()
 	var err error
 	if err != nil {
 		return err
@@ -183,7 +183,7 @@ func Excute() {
 		fmt.Errorf("ParseFile Error！%s", err)
 	}
 	batchSize := 1000 // 每批次插入的数据量
-	err = db.GetDb("mysql").AutoMigrate(&NetLog_OnlineDtail{})
+	err = db.GetDB().AutoMigrate(&NetLog_OnlineDtail{})
 	if err != nil {
 		fmt.Println("建表错误")
 		return
