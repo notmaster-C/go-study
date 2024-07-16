@@ -24,5 +24,5 @@ func main() {
 
 	// cache.InitRedis(&config.Instance.Redis)
 	// route.InitRoute()
-	test.TestGenerics()
+	test.TestDefer()
 }
