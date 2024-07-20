@@ -12,7 +12,6 @@ type TestFile struct {
 	gorm.Model
 	Name       string `gorm:"type:varchar(512);not null;index" json:"name"` // 文件名称
 	FolderPath string `gorm:"type:varchar(768);index" json:"folderPath"`    // 文件路径
-
 }
 type File struct {
 	Id         string         `gorm:"type:varchar(64);primarykey"  json:"id"`         // 文件id

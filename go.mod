@@ -14,6 +14,7 @@ require (
 	github.com/minio/minio-go v6.0.14+incompatible
 	github.com/minio/minio-go/v7 v7.0.70
 	github.com/opentracing/opentracing-go v1.2.0
+	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.18.2
 	github.com/unidoc/unioffice v1.34.0
 	github.com/whyrusleeping/go-logging v0.0.1

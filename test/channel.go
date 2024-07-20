@@ -2,8 +2,6 @@ package test
 
 import "fmt"
 
-/*
- */
 func testChannel() {
 	ch := make(chan int, 1)
 	defer close(ch)
