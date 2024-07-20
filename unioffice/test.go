@@ -49,7 +49,7 @@ func TestUnioffice(c *gin.Context) {
 		result["content"] = v.Rows()
 	}
 }
-func rows2Json(rows []spreadsheet.Row) {
+func rows2Jso1n(rows []spreadsheet.Row) {
 	// headers := rows[0]
 	// fieldsName := rows[1]
 	// jsonData := make([]map[string]interface{}, len(rows)-2)

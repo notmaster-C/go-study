@@ -1,10 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"go-study/test"
 )
 
+const initStr = "init..."
+
 func init() {
+	fmt.Println(initStr)
 	// config.Init()
 	//todo:常量进行基础赋值初始化
 	// constant.Init()
@@ -21,8 +25,9 @@ func init() {
 
 func main() {
 	// db.Init()
-
+	fmt.Println("main...")
 	// cache.InitRedis(&config.Instance.Redis)
 	// route.InitRoute()
-	test.TestDefer()
+	test.Test()
+
 }

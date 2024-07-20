@@ -922,3 +922,84 @@ func minimumMoves(nums []int, k int, maxChanges int) int64 {
 	}
 	return res
 }
+
+// 2850. 将石头分散到网格图的最少移动次数
+// 枚举法
+// 找出石头数量超过1的more数组，=0的less数组，然后遍历计算
+// 注意到这两个数组的长度相同，而 less 中没有重复元素但 more 中有，因此 more 的排列个数更少，枚举 more 的每一个排列可以使得时间复杂度更低
+func minimumMoves_2850_1(grid [][]int) int {
+	more, less := [][]int{}, [][]int{}
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++ {
+			if grid[i][j] > 1 {
+				for k := 0; k < grid[i][j]-1; k++ {
+					more = append(more, []int{i, j})
+				}
+			} else if grid[i][j] == 0 {
+				less = append(less, []int{i, j})
+			}
+		}
+	}
+
+	ans := math.MaxInt32
+	for {
+		steps := 0
+		for i := 0; i < len(more); i++ {
+			steps += abs(less[i][0]-more[i][0]) + abs(less[i][1]-more[i][1])
+		}
+		if steps < ans {
+			ans = steps
+		}
+		if !nextPermutation(more) {
+			break
+		}
+	}
+	return ans
+}
+func nextPermutation(arr [][]int) bool {
+	p := -1
+	for i := 0; i < len(arr)-1; i++ {
+		if isLess(arr[i], arr[i+1]) {
+			p = i
+		}
+	}
+	if p == -1 {
+		return false
+	}
+	q := -1
+	for j := p + 1; j < len(arr); j++ {
+		if isLess(arr[p], arr[j]) {
+			q = j
+		}
+	}
+	arr[p], arr[q] = arr[q], arr[p]
+	i, j := p+1, len(arr)-1
+	for i < j {
+		arr[i], arr[j] = arr[j], arr[i]
+		i++
+		j--
+	}
+	return true
+}
+func isLess(a, b []int) bool {
+	return a[0] < b[0] || (a[0] == b[0] && a[1] < b[1])
+}
+
+func abs(a int) int {
+	if a < 0 {
+		return -a
+	}
+	return a
+}
+
+// 122. 买卖股票的最佳时机 II
+func maxProfit(prices []int) int {
+	n := len(prices)
+	dp := make([][2]int, n)
+	dp[0][1] = -prices[0]
+	for i := 1; i < n; i++ {
+		dp[i][0] = max(dp[i-1][0], dp[i-1][1]+prices[i])
+		dp[i][1] = max(dp[i-1][1], dp[i-1][0]-prices[i])
+	}
+	return dp[n-1][0]
+}

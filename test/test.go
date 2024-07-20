@@ -5,35 +5,20 @@ import (
 	"go-study/file"
 )
 
+const str = "test..."
+
 func Test() {
-	fmt.Println("test...")
+	fmt.Println(str)
+	// testGC()
+	testChannel()
+
 	//sTime := time.Now()
 	// algorithm.Test()
-	s := []int{1, 2, 3}
-	printArray(s)
 	// utils.GithubFlush()
 	// db.EtcdWatch()
 	//time.Sleep(100)
 	//fmt.Println(time.Since(sTime).Seconds() * 1000)
 	//fileExam()
-	// 运行基准测试并报告结果
-	// 创建一个父级 context，设置超时时间为 5 秒钟
-
-	//sql:="set @total:=1,@res:=2;select @total+@res res"
-	////找到最后一个分号，前面的sql需要exec，最后一句sql通过raw执行
-	//var preSql string
-	//if strings.Contains(sql,";")&&strings.Contains(sql,"set"){
-	//	split := strings.Split(sql, ";")
-	//	preSql = sql[:strings.LastIndex(sql,";")]
-	//	sql=split[len(split)-1]
-	//}
-	////sql=preSql+sql
-	//rows, _ := db.GetDB().Exec(preSql).Raw(sql).Rows()
-	//if rows!=nil{
-	//	defer rows.Close()
-	//	res := utils.ScanRows2map(rows)
-	//	fmt.Println(res)
-	//}
 
 }
 func Test2() {
